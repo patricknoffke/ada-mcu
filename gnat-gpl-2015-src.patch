@@ -1,0 +1,1096 @@
+diff -rupN gnat-gpl-2015-src-orig/src/ada/a-intnam-xi-sam4s.ads gnat-gpl-2015-src-patched/src/ada/a-intnam-xi-sam4s.ads
+--- gnat-gpl-2015-src-orig/src/ada/a-intnam-xi-sam4s.ads	2015-05-06 05:53:32.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/a-intnam-xi-sam4s.ads	2015-07-15 09:03:49.179086384 -0500
+@@ -6,7 +6,7 @@
+ --                                                                          --
+ --                                  S p e c                                 --
+ --                                                                          --
+---          Copyright (C) 1991-2014, Free Software Foundation, Inc.         --
++--          Copyright (C) 1991-2013, 2015, Free Software Foundation, Inc.   --
+ --                                                                          --
+ -- GNAT is free software;  you can  redistribute it  and/or modify it under --
+ -- terms of the  GNU General Public License as published  by the Free Soft- --
+@@ -29,7 +29,7 @@
+ --                                                                          --
+ ------------------------------------------------------------------------------
+ 
+---  This is the version for Cortex M4 SAM4S targets
++--  This is the version for Cortex-M4 SAM4S targets
+ 
+ package Ada.Interrupts.Names is
+ 
+@@ -37,48 +37,50 @@ package Ada.Interrupts.Names is
+ 
+    pragma Implementation_Defined;
+ 
+-   --  The SAM4S datasheet defines peripheral indentifiers in Table 11-1
+-   --  (page 41 of 1100E–ATARM–24-Jul-13). The meaningful number, the ID
+-   --  starts at 0. Unfortunately, Interrupt_ID 0 is reserved and the SysTick
+-   --  interrupt (a core interrupt) is handled by the runtime like other
+-   --  interrupts. So the first interrupt (supply controler) is numbered 2
+-   --  while its ID is 0 in the manual. The offset of 2 is reflected in
+-   --  s-bbbosu-stm32f4.adb by the First_IRQ constant.
+-
+-   Sys_Tick_Interrupt : constant Interrupt_ID := 1;
+-   SUPC_Interrupt     : constant Interrupt_ID := 2;
+-   RSTC_Interrupt     : constant Interrupt_ID := 3;
+-   RTC_Interrupt      : constant Interrupt_ID := 4;
+-   RTT_Interrupt      : constant Interrupt_ID := 5;
+-   WDT_Interrupt      : constant Interrupt_ID := 6;
+-   PMC_Interrupt      : constant Interrupt_ID := 7;
+-   EEFC0_Interrupt    : constant Interrupt_ID := 8;
+-   EEFC1_Interrupt    : constant Interrupt_ID := 9;
+-   UART0_Interrupt    : constant Interrupt_ID := 10;
+-   UART1_Interrupt    : constant Interrupt_ID := 11;
+-   SMC_Interrupt      : constant Interrupt_ID := 12;
+-   PIOA_Interrupt     : constant Interrupt_ID := 13;
+-   PIOB_Interrupt     : constant Interrupt_ID := 14;
+-   PIOC_Interrupt     : constant Interrupt_ID := 15;
+-   USART0_Interrupt   : constant Interrupt_ID := 16;
+-   USART1_Interrupt   : constant Interrupt_ID := 17;
+-
+-   GSMCI_Interrupt    : constant Interrupt_ID := 20;
+-   TWI0_Interrupt     : constant Interrupt_ID := 21;
+-   TWO1_Interrupt     : constant Interrupt_ID := 22;
+-   SPI_Interrupt      : constant Interrupt_ID := 23;
+-   SSC_Interrupt      : constant Interrupt_ID := 24;
+-   TC0_Interrupt      : constant Interrupt_ID := 25;
+-   TC1_Interrupt      : constant Interrupt_ID := 26;
+-   TC2_Interrupt      : constant Interrupt_ID := 27;
+-   TC3_Interrupt      : constant Interrupt_ID := 28;
+-   TC4_Interrupt      : constant Interrupt_ID := 29;
+-   TC5_Interrupt      : constant Interrupt_ID := 30;
+-   ADC_Interrupt      : constant Interrupt_ID := 31;
+-   DACC_Interrupt     : constant Interrupt_ID := 32;
+-   PWM_Interrupt      : constant Interrupt_ID := 33;
+-   CRCCU_Interrupt    : constant Interrupt_ID := 34;
+-   ACC_Interrupt      : constant Interrupt_ID := 35;
+-   UDP_Interrupt      : constant Interrupt_ID := 36;
++   --  The SAM4S data sheet defines the interrupts in Table 11-1 (page
++   --  48 of the 08-Jan-15 datasheet). The meaningful number, the
++   --  position starts at 0. Unfortunately, Interrupt_ID 0 is reserved
++   --  and the SysTick interrupt (a core interrupt) is handled by the
++   --  runtime like other interrupts. So the first interrupt (SUPC) is
++   --  numbered 2 while it is at position 0 in the manual. The offset
++   --  of 2 is reflected in s-bbbosu-sam4s.adb by the First_IRQ
++   --  constant.
++
++   Sys_Tick_Interrupt               : constant Interrupt_ID := 1;
++   SUPC_Interrupt                   : constant Interrupt_ID := 2;
++   RSTC_Interrupt                   : constant Interrupt_ID := 3;
++   RTC_Interrupt                    : constant Interrupt_ID := 4;
++   RTT_Interrupt                    : constant Interrupt_ID := 5;
++   WDT_Interrupt                    : constant Interrupt_ID := 6;
++   PMC_Interrupt                    : constant Interrupt_ID := 7;
++   EEFC0_Interrupt                  : constant Interrupt_ID := 8;
++   Reserved_7_Interrupt             : constant Interrupt_ID := 9;
++   UART0_Interrupt                  : constant Interrupt_ID := 10;
++   UART1_Interrupt                  : constant Interrupt_ID := 11;
++   SMC_Interrupt                    : constant Interrupt_ID := 12;
++   PIOA_Interrupt                   : constant Interrupt_ID := 13;
++   PIOB_Interrupt                   : constant Interrupt_ID := 14;
++   PIOC_Interrupt                   : constant Interrupt_ID := 15;
++   USART0_Interrupt                 : constant Interrupt_ID := 16;
++   USART1_Interrupt                 : constant Interrupt_ID := 17;
++   Reserved_16_Interrupt            : constant Interrupt_ID := 18;
++   Reserved_17_Interrupt            : constant Interrupt_ID := 19;
++   HSMCI_Interrupt                  : constant Interrupt_ID := 20;
++   TWI0_Interrupt                   : constant Interrupt_ID := 21;
++   TWI1_Interrupt                   : constant Interrupt_ID := 22;
++   SPI_Interrupt                    : constant Interrupt_ID := 23;
++   SSC_Interrupt                    : constant Interrupt_ID := 24;
++   TC0_Interrupt                    : constant Interrupt_ID := 25;
++   TC1_Interrupt                    : constant Interrupt_ID := 26;
++   TC2_Interrupt                    : constant Interrupt_ID := 27;
++   TC3_Interrupt                    : constant Interrupt_ID := 28;
++   TC4_Interrupt                    : constant Interrupt_ID := 29;
++   TC5_Interrupt                    : constant Interrupt_ID := 30;
++   ADC_Interrupt                    : constant Interrupt_ID := 31;
++   DACC_Interrupt                   : constant Interrupt_ID := 32;
++   PWM_Interrupt                    : constant Interrupt_ID := 33;
++   CRCCU_Interrupt                  : constant Interrupt_ID := 34;
++   ACC_Interrupt                    : constant Interrupt_ID := 35;
++   UDP_Interrupt                    : constant Interrupt_ID := 36;
+ 
+ end Ada.Interrupts.Names;
+diff -rupN gnat-gpl-2015-src-orig/src/ada/Makefile.hie gnat-gpl-2015-src-patched/src/ada/Makefile.hie
+--- gnat-gpl-2015-src-orig/src/ada/Makefile.hie	2015-05-06 05:53:09.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/Makefile.hie	2015-07-15 11:12:10.522029980 -0500
+@@ -247,7 +247,8 @@ endif
+ 
+ ifeq ($(strip $(filter-out ravenscar-sfp ravenscar-minimal ravenscar-apex, $(RTS))),)
+ 
+-    LIBGNAT_SOURCES+=  s-sssita.adb s-sssita.ads
++    LIBGNAT_SOURCES+=  s-sssita.adb s-sssita.ads i-c.adb i-cpoint.adb i-cpoint.ads \
++       i-cstrin.adb i-cstrin.ads
+ 
+     LIBGNARL_SOURCES+= a-taster.adb a-taster.ads
+ 
+@@ -255,7 +256,6 @@ ifeq ($(strip $(filter-out ravenscar-sfp
+        a-except.ads:a-except-zfp.ads a-tags.adb:a-tags-hie.adb \
+        a-tags.ads:a-tags-hie.ads \
+        a-taster.adb:a-taster-raven.adb a-taster.ads:a-taster-raven.ads \
+-       i-c.ads:i-c-hie.ads \
+        s-assert.adb:s-assert-xi.adb s-parame.adb:s-parame-xi.adb \
+        s-parame.ads:s-parame-xi.ads s-secsta.adb:s-secsta-zfp.adb \
+        s-secsta.ads:s-secsta-zfp.ads s-sssita.adb:s-sssita-xi.adb \
+@@ -808,7 +808,9 @@ ifeq (ravenscar, $(RTS))
+        s-wwdenu.adb \
+        s-wwdenu.ads \
+        s-wwdwch.adb \
+-       s-wwdwch.ads
++       s-wwdwch.ads \
++       i-c.adb i-cpoint.adb i-cpoint.ads \
++       i-cstrin.adb i-cstrin.ads
+ 
+     LIBGNAT_NON_COMPILABLE_SOURCES+= a-excach.adb
+ 
+@@ -817,7 +819,6 @@ ifeq (ravenscar, $(RTS))
+     TARGET_PAIRS+= a-elchha.adb:a-elchha-xi.adb a-excach.adb:a-excach-cert.adb \
+        a-except.adb:a-except-xi.adb a-except.ads:a-except-cert.ads \
+        a-taster.adb:a-taster-raven.adb a-taster.ads:a-taster-raven.ads \
+-       i-c.ads:i-c-hie.ads \
+        s-io.adb:s-io-xi.adb \
+        s-memory.adb:s-memory-xi.adb \
+        s-parame.adb:s-parame-xi.adb s-parame.ads:s-parame-xi.ads \
+diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbbosu-armv7m.adb gnat-gpl-2015-src-patched/src/ada/s-bbbosu-armv7m.adb
+--- gnat-gpl-2015-src-orig/src/ada/s-bbbosu-armv7m.adb	2015-05-06 05:53:28.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/s-bbbosu-armv7m.adb	2015-07-15 09:20:53.881720821 -0500
+@@ -6,9 +6,9 @@
+ --                                                                          --
+ --                                  B o d y                                 --
+ --                                                                          --
+---        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
++--        Copyright (C) 1999-2002, 2015 Universidad Politecnica de Madrid   --
+ --             Copyright (C) 2003-2005 The European Space Agency            --
+---                     Copyright (C) 2003-2015, AdaCore                     --
++--                     Copyright (C) 2003-2013, AdaCore                     --
+ --                                                                          --
+ -- GNAT is free software;  you can  redistribute it  and/or modify it under --
+ -- terms of the  GNU General Public License as published  by the Free Soft- --
+@@ -47,6 +47,7 @@ package body System.BB.Board_Support is
+    --  Defined by ARMv7-M specifications.
+ 
+    First_IRQ : constant Interrupt_ID := 2;
++   --  SUPC_Interrupt
+    --  This corresponds to the first IRQ number (handled by the NVIC). This
+    --  offset is present so that the Sys_Tick exception can be handled like
+    --  other interrupts, and because interrupt id 0 is reserved.
+@@ -76,10 +77,9 @@ package body System.BB.Board_Support is
+    Tick_Period   : constant Timer_Interval := Clock_Frequency / 1000;
+ 
+    type Sys_Tick_Registers is record
+-      SYST_CSR   : Word;
+-      SYST_RVR   : Word;
+-      SYST_CVR   : Word;
+-      SYST_CALIB : Word;
++      STCTRL     : Word;
++      STRELOAD   : Word;
++      STCURRENT  : Word;
+    end record;
+ 
+    CSR_Count_Flag : constant := 2**16;
+@@ -87,8 +87,8 @@ package body System.BB.Board_Support is
+    CSR_Tick_Int   : constant := 2**1;
+    CSR_Enable     : constant := 2**0;
+ 
+-   RVR_Last       : constant := 2**24 - 1;
+-   pragma Assert (Tick_Period <= RVR_Last + 1);
++   STRELOAD_Last       : constant := 2**24 - 1;
++   pragma Assert (Tick_Period <= STRELOAD_Last + 1);
+ 
+    SYST : Sys_Tick_Registers with Volatile, Address => 16#E000_E010#;
+    --  SysTick control and status register (Part of SYST).
+@@ -100,7 +100,7 @@ package body System.BB.Board_Support is
+    -- New Vectored Interrupt Controller (NVIC) --
+    ----------------------------------------------
+ 
+-   NVIC_Base : constant := 16#E000_E000#;
++   NVIC_Base : constant Address := 16#E000_E000#;
+    --  Nested Vectored Interrupt Controller (NVIC) base.
+ 
+    NVIC_ISER0 : constant Address := NVIC_Base + 16#100#;
+@@ -146,17 +146,17 @@ package body System.BB.Board_Support is
+       Disable_Interrupts;
+ 
+       --  Because we operate the SysTick clock as a periodic timer, and 24 bits
+-      --  at 168 MHz is sufficient for that, use the unscaled system clock.
++      --  at 120 MHz is sufficient for that, use the unscaled system clock.
+ 
+       --  To initialize the Sys_Tick timer, first disable the clock, then
+       --  program it and finally enable it. This way an accidentally
+       --  misconfigured timer will not cause pending interrupt while
+       --  reprogramming.
+ 
+-      SYST.SYST_CSR := CSR_Clk_Source; -- disable clock
+-      SYST.SYST_RVR := Word (Tick_Period - 1);
+-      SYST.SYST_CVR := 0;
+-      SYST.SYST_CSR := CSR_Clk_Source or CSR_Enable;
++      SYST.STCTRL := CSR_Clk_Source; -- disable clock
++      SYST.STRELOAD := Word (Tick_Period - 1);
++      SYST.STCURRENT := 0;
++      SYST.STCTRL := CSR_Clk_Source or CSR_Enable;
+ 
+       Next_Tick_Time := Tick_Period;
+       Set_Alarm (Timer_Interval'Last);
+@@ -193,7 +193,7 @@ package body System.BB.Board_Support is
+ 
+       --  We must read the counter register before the flag
+ 
+-      Count := Timer_Interval (SYST.SYST_CVR);
++      Count := Timer_Interval (SYST.STCURRENT);
+ 
+       --  If we read the flag first, a reload can occur just after the read and
+       --  the count register would wrap around. We'd end up with a Count value
+@@ -205,7 +205,7 @@ package body System.BB.Board_Support is
+       --  has just triggered the interrupt), so count is either zero or not far
+       --  from Tick_Period.
+ 
+-      Flag := (SYST.SYST_CSR and CSR_Count_Flag) /= 0;
++      Flag := (SYST.STCTRL and CSR_Count_Flag) /= 0;
+ 
+       if Flag then
+ 
+@@ -336,7 +336,7 @@ package body System.BB.Board_Support is
+          pragma Assert (Prio = Interrupt_Priority'Last);
+ 
+          Clear_Alarm_Interrupt;
+-         SYST.SYST_CSR := SYST.SYST_CSR or CSR_Tick_Int;
++         SYST.STCTRL := SYST.STCTRL or CSR_Tick_Int;
+ 
+       else
+          declare
+@@ -386,7 +386,7 @@ package body System.BB.Board_Support is
+    function Priority_Of_Interrupt
+      (Interrupt : Interrupt_ID) return Any_Priority
+    is
+-      --  Interrupt 2 .. 83 correspond to IRQ0 .. IRQ81
++      --  Interrupt 2 .. 36 correspond to IRQ0 .. IRQ34
+ 
+       (if Interrupt = Alarm_Interrupt_ID then Interrupt_Priority'Last
+        else To_Priority (IP (Interrupt - First_IRQ)));
+diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-patched/src/ada/s-bbcppr-armv7m.adb
+--- gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb	2015-05-06 05:53:27.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/s-bbcppr-armv7m.adb	2015-07-15 09:29:17.009717955 -0500
+@@ -6,9 +6,10 @@
+ --                                                                          --
+ --                                  B o d y                                 --
+ --                                                                          --
++--          Copyright (C) 2015, Free Software Foundation, Inc.              --
+ --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
+ --             Copyright (C) 2003-2005 The European Space Agency            --
+---                     Copyright (C) 2003-2015, AdaCore                     --
++--                     Copyright (C) 2003-2013, AdaCore                     --
+ --                                                                          --
+ -- GNARL is free software; you can  redistribute it  and/or modify it under --
+ -- terms of the  GNU General Public License as published  by the Free Soft- --
+@@ -17,9 +18,9 @@
+ -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+ -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
+ --                                                                          --
+---                                                                          --
+---                                                                          --
+---                                                                          --
++-- As a special exception under Section 7 of GPL version 3, you are granted --
++-- additional permissions described in the GCC Runtime Library Exception,   --
++-- version 3.1, as published by the Free Software Foundation.               --
+ --                                                                          --
+ -- You should have received a copy of the GNU General Public License and    --
+ -- a copy of the GCC Runtime Library Exception along with this program;     --
+@@ -33,6 +34,7 @@
+ 
+ with Ada.Unchecked_Conversion; use Ada;
+ 
++with Interfaces; use Interfaces;
+ with System.Storage_Elements;
+ with System.Multiprocessors;
+ with System.BB.Board_Support;
+@@ -40,6 +42,7 @@ with System.BB.Threads;
+ with System.BB.Threads.Queues;
+ with System.BB.Time;
+ with System.Machine_Code; use System.Machine_Code;
++--  with SAM4S.Trace;
+ 
+ package body System.BB.CPU_Primitives is
+    use Parameters;
+@@ -100,6 +103,15 @@ package body System.BB.CPU_Primitives is
+    pragma Volatile (Alarm_Time);
+    pragma Import (C, Alarm_Time, "__gnat_alarm_time");
+ 
++   procedure Hard_Fault_Handler_Asm;
++   pragma Machine_Attribute (Hard_Fault_Handler_Asm, "naked");
++   pragma Export (Asm, Hard_Fault_Handler_Asm, "__gnat_hard_fault_trap");
++   --  This assembly routine needs to save and restore registers without
++   --  interference. The "naked" machine attribute communicates this to GCC.
++
++   procedure Hard_Fault_Handler (SP : Address);
++   pragma Export (Asm, Hard_Fault_Handler, "__hard_fault_handler");
++
+    procedure SV_Call_Handler;
+    pragma Export (Asm, SV_Call_Handler, "__gnat_sv_call_trap");
+ 
+@@ -275,6 +287,7 @@ package body System.BB.CPU_Primitives is
+ 
+    procedure GNAT_Error_Handler (Trap : Vector_Id) is
+    begin
++      --  SAM4S.Trace.Put (0, SAM4S.Trace.Value_Type (Trap));
+       case Trap is
+          when Reset_Vector =>
+             raise Program_Error with "unexpected reset";
+@@ -384,6 +397,49 @@ package body System.BB.CPU_Primitives is
+          Volatile => True);
+    end Pend_SV_Handler;
+ 
++   ----------------------------
++   -- Hard_Fault_Handler_Asm --
++   ----------------------------
++
++   procedure Hard_Fault_Handler_Asm is
++   begin
++      Asm ("tst lr, #4"                    & NL &
++             "ite eq"                        & NL &
++             "mrseq r0, msp"                 & NL &
++             "mrsne r0, psp"                 & NL &
++             "ldr r1, [r0, #24]"             & NL &
++             "ldr r2, handler_addr"          & NL &
++             "bx r2"                         & NL &
++             "handler_addr: .word __hard_fault_handler" & NL,
++           Volatile => True);
++   end Hard_Fault_Handler_Asm;
++
++   ----------------------------
++   -- Hard_Fault_Handler --
++   ----------------------------
++
++   procedure Hard_Fault_Handler (SP : Address) is
++      Hw_Ctx : Hardware_Context with Address => SP, Volatile;
++      HFSR : Interfaces.Unsigned_32 with Address => 16#E000_ED2C#, Volatile;
++      CFSR : Interfaces.Unsigned_32 with Address => 16#E000_ED28#, Volatile;
++   begin
++      Asm ("BKPT #01", Volatile => True);
++      --  SAM4S.Trace.Put (0, "In Hard_Fault_Handler");
++      --  SAM4S.Trace.Put (0, SAM4S.Trace.Value_Type (HFSR));
++      --  SAM4S.Trace.Put (0, SAM4S.Trace.Value_Type (CFSR));
++
++      if (HFSR and 16#4000_0000#) /= 0 then
++         --  Forced hard fault.
++         if (CFSR and 16#0200_0000#) /= 0 then
++            --  Divide by zero.
++            --  SAM4S.Trace.Put (0, "Divide by zero.");
++            null;
++         end if;
++      end if;
++
++      GNAT_Error_Handler (Hard_Fault_Vector);
++   end Hard_Fault_Handler;
++
+    ---------------------
+    -- SV_Call_Handler --
+    ---------------------
+@@ -478,9 +534,11 @@ package body System.BB.CPU_Primitives is
+    begin
+       Install_Trap_Handler (EH, Reset_Vector);
+       Install_Trap_Handler (EH, NMI_Vector);
+-      Install_Trap_Handler (EH, Hard_Fault_Vector);
++      --  Install_Trap_Handler (EH, Hard_Fault_Vector);
+       Install_Trap_Handler (EH, Bus_Fault_Vector);
+       Install_Trap_Handler (EH, Usage_Fault_Vector);
++      --  Install_Trap_Handler (EH, Sys_Tick_Vector);
++      --  Why is Pend_SV installed as a trap handler (when Sys_Tick is not)?
+       Install_Trap_Handler (EH, Pend_SV_Vector);
+       Install_Trap_Handler (EH, SV_Call_Vector);
+    end Install_Error_Handlers;
+diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbpara-sam4s.ads gnat-gpl-2015-src-patched/src/ada/s-bbpara-sam4s.ads
+--- gnat-gpl-2015-src-orig/src/ada/s-bbpara-sam4s.ads	2015-05-06 05:53:27.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/s-bbpara-sam4s.ads	2015-07-15 09:05:39.426108506 -0500
+@@ -91,7 +91,7 @@ package System.BB.Parameters is
+    -- Stacks --
+    ------------
+ 
+-   Interrupt_Stack_Size : constant := 2 * 1024;
++   Interrupt_Stack_Size : constant := 1024;
+    --  Size of each of the interrupt stacks in bytes. While there nominally is
+    --  an interrupt stack per interrupt priority, the entire space is used as a
+    --  single stack.
+diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbthqu.adb gnat-gpl-2015-src-patched/src/ada/s-bbthqu.adb
+--- gnat-gpl-2015-src-orig/src/ada/s-bbthqu.adb	2015-05-06 05:53:27.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/s-bbthqu.adb	2015-07-15 09:22:10.825344008 -0500
+@@ -151,6 +151,7 @@ package body System.BB.Threads.Queues is
+ 
+       First_Thread_Table (CPU_Id) := Thread.Next;
+       Thread.Next := Null_Thread_Id;
++
+    end Extract;
+ 
+    -------------------------
+@@ -211,6 +212,7 @@ package body System.BB.Threads.Queues is
+       CPU_Id      : constant CPU := Get_CPU (Thread);
+ 
+    begin
++
+       --  ??? This pragma is disabled because the Tasks_Activated only
+       --  represents the end of activation for one package not all the
+       --  packages. We have to find a better milestone for the end of
+@@ -232,52 +234,50 @@ package body System.BB.Threads.Queues is
+       if First_Thread_Table (CPU_Id) = Thread then
+          null;
+ 
+-      --  Insert at the head of queue if there is no other thread with a higher
+-      --  priority.
++         --  Insert at the head of queue if there is no other thread
++         --  with a higher priority.
+ 
+-      elsif First_Thread_Table (CPU_Id) = Null_Thread_Id
+-        or else
+-          Thread.Active_Priority > First_Thread_Table (CPU_Id).Active_Priority
+-      then
++      elsif First_Thread_Table (CPU_Id) = Null_Thread_Id then
+          Thread.Next := First_Thread_Table (CPU_Id);
+          First_Thread_Table (CPU_Id) := Thread;
+ 
+-      --  Middle or tail insertion
+-
+       else
+-         --  Look for the Aux_Pointer to insert the thread just after it
++         --  Middle or tail insertion
+ 
++         --  Remove the thread if it is already in the queue.  We know
++         --  the first thread is not null.
+          Aux_Pointer := First_Thread_Table (CPU_Id);
+          while Aux_Pointer.Next /= Null_Thread_Id
+            and then Aux_Pointer.Next /= Thread
+-           and then Aux_Pointer.Next.Active_Priority >= Thread.Active_Priority
+          loop
+             Aux_Pointer := Aux_Pointer.Next;
+          end loop;
+ 
+-         --  If we found the thread already in the queue, then we need to move
+-         --  it to its right place.
+-
+          if Aux_Pointer.Next = Thread then
+-
+-            --  Extract it from its current location
+-
+             Aux_Pointer.Next := Thread.Next;
++         end if;
+ 
++         if
++           Thread.Active_Priority > First_Thread_Table (CPU_Id).Active_Priority
++         then
++            Thread.Next := First_Thread_Table (CPU_Id);
++            First_Thread_Table (CPU_Id) := Thread;
++         else
+             --  Look for the Aux_Pointer to insert the thread just after it
+ 
++            Aux_Pointer := First_Thread_Table (CPU_Id);
+             while Aux_Pointer.Next /= Null_Thread_Id
+-              and then
+-                Aux_Pointer.Next.Active_Priority >= Thread.Active_Priority
++              and then Aux_Pointer.Next.Active_Priority >=
++              Thread.Active_Priority
+             loop
+                Aux_Pointer := Aux_Pointer.Next;
+             end loop;
+-         end if;
+ 
+-         --  Insert the thread after the Aux_Pointer
++            --  Insert the thread after the Aux_Pointer
+ 
+-         Thread.Next := Aux_Pointer.Next;
+-         Aux_Pointer.Next := Thread;
++            Thread.Next := Aux_Pointer.Next;
++            Aux_Pointer.Next := Thread;
++         end if;
+       end if;
+    end Insert;
+ 
+diff -rupN gnat-gpl-2015-src-orig/src/ada/s-sam4s.ads gnat-gpl-2015-src-patched/src/ada/s-sam4s.ads
+--- gnat-gpl-2015-src-orig/src/ada/s-sam4s.ads	2015-05-06 05:53:31.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/s-sam4s.ads	1969-12-31 18:00:00.000000000 -0600
+@@ -1,484 +0,0 @@
+-------------------------------------------------------------------------------
+---                                                                          --
+---                         GNAT RUN-TIME COMPONENTS                         --
+---                                                                          --
+---                         S Y S T E M . S A M 4 S                          --
+---                                                                          --
+---                                 S p e c                                  --
+---                                                                          --
+---             Copyright (C) 2014, Free Software Foundation, Inc.           --
+---                                                                          --
+--- GNAT is free software;  you can  redistribute it  and/or modify it under --
+--- terms of the  GNU General Public License as published  by the Free Soft- --
+--- ware  Foundation;  either version 3,  or (at your option) any later ver- --
+--- sion.  GNAT is distributed in the hope that it will be useful, but WITH- --
+--- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
+---                                                                          --
+---                                                                          --
+---                                                                          --
+---                                                                          --
+---                                                                          --
+--- You should have received a copy of the GNU General Public License and    --
+--- a copy of the GCC Runtime Library Exception along with this program;     --
+--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+--- <http://www.gnu.org/licenses/>.                                          --
+---                                                                          --
+--- GNAT was originally developed  by the GNAT team at  New York University. --
+--- Extensive contributions were provided by Ada Core Technologies Inc.      --
+---                                                                          --
+-------------------------------------------------------------------------------
+-
+---  This file provides register definitions for the SAM4S (ARM Cortex M4)
+---  microcontrollers from Atmel. Definitions are taken from 'SAM4S Series'
+---  datasheet (document 11100E-ATARM-24-Jul-13).
+-
+-package System.SAM4S is
+-   pragma No_Elaboration_Code_All;
+-   --  Allow user code with pragma No_Elaboration_Code_All to use this package
+-
+-   pragma Preelaborate (System.SAM4S);
+-
+-   pragma Suppress (Alignment_Check);
+-   --  Avoid any warnings for address clauses on variables of type record.
+-
+-   type Word is mod 2**32;
+-
+-   --  Define address bases for various peripherals
+-
+-   Peripheral_Base : constant := 16#4000_0000#;
+-
+-   SPI_Base : constant := Peripheral_Base + 16#8000#;
+-
+-   System_Controller_Base : constant := Peripheral_Base + 16#e_0000#;
+-   PMC_Base   : constant := System_Controller_Base + 16#0400#;
+-   UART0_Base : constant := System_Controller_Base + 16#0600#;
+-   UART1_Base : constant := System_Controller_Base + 16#0800#;
+-   EFC0_Base  : constant := System_Controller_Base + 16#0A00#;
+-   EFC1_Base  : constant := System_Controller_Base + 16#0C00#;
+-
+-   PIOA_Base  : constant := System_Controller_Base + 16#0e00#;
+-   PIOB_Base  : constant := System_Controller_Base + 16#1000#;
+-   PIOC_Base  : constant := System_Controller_Base + 16#1200#;
+-   WDT_Base   : constant := System_Controller_Base + 16#1450#;
+-
+-   ---------------------------------
+-   -- Power Management Controller --
+-   ---------------------------------
+-
+-   type PMC_Registers is record
+-      PMC_SCER   : Word;
+-      PMC_SCDR   : Word;
+-      PMC_SCSR   : Word;
+-      Pad0       : Word;
+-
+-      PMC_PCER0  : Word;
+-      PMC_PCDR0  : Word;
+-      PMC_PCSR0  : Word;
+-      Pad1       : Word;
+-
+-      CKGR_MOR   : Word;
+-      CKGR_MCFR  : Word;
+-      CKGR_PLLAR : Word;
+-      CKGR_PLLBR : Word;
+-
+-      PMC_MCKR   : Word;
+-      Pad3_4     : Word;
+-      PMC_USB    : Word;
+-      Pad3_C     : Word;
+-
+-      PMC_PCK0   : Word;
+-      PMC_PCK1   : Word;
+-      PMC_PCK2   : Word;
+-      Pad4_C     : Word;
+-
+-      Pad5_0     : Word;
+-      Pad5_4     : Word;
+-      Pad5_8     : Word;
+-      Pad5_C     : Word;
+-
+-      PMC_IER    : Word;
+-      PMC_IDR    : Word;
+-      PMC_SR     : Word;
+-      PMC_IMR    : Word;
+-
+-      PMC_FSMR   : Word;
+-      PMC_FSPR   : Word;
+-      PMC_FOCR   : Word;
+-      Pad7_C     : Word;
+-
+-      --  Not complete
+-   end record;
+-
+-   PMC : PMC_Registers with Volatile, Import,
+-                            Address => System'To_Address (PMC_Base);
+-
+-   --  Constants for the CKGR MOR register
+-
+-   package CKGR_MOR is
+-      CFDEN    : constant := 2 ** 25;
+-      MOSCSEL  : constant := 2 ** 24;
+-      KEY      : constant := 16#37# * 2 ** 16;
+-
+-      MOSCXTST : constant := 2 ** 8;
+-
+-      MOSCRCEN : constant := 2 ** 3;
+-      WAITMODE : constant := 2 ** 2;
+-      MOSCXTBY : constant := 2 ** 1;
+-      MOSCXTEN : constant := 2 ** 0;
+-   end CKGR_MOR;
+-
+-   --  Constants for the PMC SR register
+-
+-   package PMC_SR is
+-      MCKRDY   : constant := 2 ** 3;
+-      LOCKB    : constant := 2 ** 2;
+-      LOCKA    : constant := 2 ** 1;
+-      MOSCXTS  : constant := 2 ** 0;
+-   end PMC_SR;
+-
+-   --  Constants for the CKGR PLLAR and PLLBR registers
+-
+-   package CKGR_PLLxR is
+-      DIV      : constant := 2 ** 0;
+-      PLLCOUNT : constant := 2 ** 8;
+-      MUL      : constant := 2 ** 16;
+-      ONE      : constant := 2 ** 29;
+-   end CKGR_PLLxR;
+-
+-   --  Constants for the PMC MCKR register
+-
+-   package PMC_MCKR is
+-      PLLBDIV2 : constant := 2 ** 13;
+-      PLLADIV2 : constant := 2 ** 12;
+-      PRES_Mask : constant := 2#111# * 2 ** 4;
+-      CLK_1  : constant := 0 * 2 ** 4;
+-      CLK_2  : constant := 1 * 2 ** 4;
+-      CLK_4  : constant := 2 * 2 ** 4;
+-      CLK_8  : constant := 3 * 2 ** 4;
+-      CLK_16 : constant := 4 * 2 ** 4;
+-      CLK_32 : constant := 5 * 2 ** 4;
+-      CLK_64 : constant := 6 * 2 ** 4;
+-      CLK_3  : constant := 7 * 2 ** 4;
+-      CSS_Mask : constant := 2#11# * 2 ** 0;
+-      SLOW_CLK : constant := 0 * 2 ** 0;
+-      MAIN_CLK : constant := 1 * 2 ** 0;
+-      PLLA_CLK : constant := 2 * 2 ** 0;
+-      PLLB_CLK : constant := 3 * 2 ** 0;
+-   end PMC_MCKR;
+-
+-   ----------------------------------------
+-   -- Enhanced Embedded Flash Controller --
+-   ----------------------------------------
+-
+-   type EEFC_Registers is record
+-      EEFC_FMR : Word;
+-      EEFC_FCR : Word;
+-      EEFC_FSR : Word;
+-      EEFC_FFR : Word;
+-   end record;
+-
+-   --  Constants for the EEFC FMR register
+-
+-   package EEFC_FMR is
+-      FRDY : constant := 2 ** 0;
+-      FWS  : constant := 2 ** 8;
+-      SCOD : constant := 2 ** 16;
+-      FAM  : constant := 2 ** 24;
+-      CLOE : constant := 2 ** 26;
+-   end EEFC_FMR;
+-
+-   EFC0 : EEFC_Registers with Volatile, Import,
+-                            Address => System'To_Address (EFC0_Base);
+-
+-   --------------------------------------
+-   -- Parallel Input/Output Controller --
+-   --------------------------------------
+-
+-   type PIO_Registers is record
+-      PER     : Word;
+-      PDR     : Word;
+-      PSR     : Word;
+-      Pad0    : Word;
+-
+-      OER     : Word;
+-      ODR     : Word;
+-      OSR     : Word;
+-      Pad1    : Word;
+-
+-      IFER    : Word;
+-      IFDR    : Word;
+-      IFSR    : Word;
+-      Pad2    : Word;
+-
+-      SODR    : Word;
+-      CODR    : Word;
+-      ODSR    : Word;
+-      PDSR    : Word;
+-
+-      IER     : Word;
+-      IDR     : Word;
+-      IMR     : Word;
+-      ISR     : Word;
+-
+-      MDER    : Word;
+-      MDDR    : Word;
+-      MDSR    : Word;
+-      Pad5    : Word;
+-
+-      PUDR    : Word;
+-      PUER    : Word;
+-      PUSR    : Word;
+-      Pad6    : Word;
+-
+-      ABCDSR1 : Word;
+-      ABCDSR2 : Word;
+-      Pad7_8  : Word;
+-      Pad7_C  : Word;
+-
+-      IFSCDR  : Word;
+-      IFSCER  : Word;
+-      IFSCSR  : Word;
+-      SCDR    : Word;
+-
+-      PPDDR   : Word;
+-      PPDER   : Word;
+-      PPDSR   : Word;
+-      Pad9    : Word;
+-
+-      OWER    : Word;
+-      OWDR    : Word;
+-      OWSR    : Word;
+-      Pada    : Word;
+-
+-      AIMER   : Word;
+-      AIMDR   : Word;
+-      AIMMR   : Word;
+-      Padb    : Word;
+-
+-      ESR     : Word;
+-      LSR     : Word;
+-      ELSR    : Word;
+-      Padc    : Word;
+-
+-      FELLSR  : Word;
+-      REHLSR  : Word;
+-      FRLHSR  : Word;
+-      Padd    : Word;
+-
+-      LOCKSR  : Word;
+-      WPMR    : Word;
+-      WPSR    : Word;
+-      PadE_C  : Word;
+-   end record;
+-
+-   PIOA : PIO_Registers with Volatile, Import,
+-                             Address => System'To_Address (PIOA_Base);
+-   PIOB : PIO_Registers with Volatile, Import,
+-                             Address => System'To_Address (PIOB_Base);
+-   PIOC : PIO_Registers with Volatile, Import,
+-                             Address => System'To_Address (PIOC_Base);
+-
+-   PIOA_ID : constant := 11;
+-   PIOB_ID : constant := 12;
+-   PIOC_ID : constant := 13;
+-
+-   ----------------------------------
+-   --  Serial Peripheral Interface --
+-   ----------------------------------
+-
+-   type SPI_Registers is record
+-      SPI_CR   : Word;
+-      SPI_MR   : Word;
+-      SPI_RDR  : Word;
+-      SPI_TDR  : Word;
+-
+-      SPI_SR   : Word;
+-      SPI_IER  : Word;
+-      SPI_IDR  : Word;
+-      SPI_IMR  : Word;
+-
+-      Pad_20   : Word;
+-      Pad_24   : Word;
+-      Pad_28   : Word;
+-      Pad_2c   : Word;
+-
+-      SPI_CSR0 : Word;
+-      SPI_CSR1 : Word;
+-      SPI_CSR2 : Word;
+-      SPI_CSR3 : Word;
+-
+-      --  ...
+-   end record;
+-
+-   --  Constants for the SPI CR register
+-
+-   package SPI_CR is
+-      SPIEN  : constant := 2 ** 0;
+-      SPIDIS : constant := 2 ** 1;
+-      SWRST  : constant := 2 ** 7;
+-
+-      LASTXFER : constant := 2 ** 24;
+-   end SPI_CR;
+-
+-   --  Constants for the SPI MR register
+-
+-   package SPI_MR is
+-      MSTR    : constant := 2 ** 0;
+-      PS      : constant := 2 ** 1;
+-      PCSDEC  : constant := 2 ** 2;
+-      MODFDIS : constant := 2 ** 4;
+-      WDRBT   : constant := 2 ** 5;
+-      LLB     : constant := 2 ** 7;
+-
+-      PCS         : constant := 2 ** 16;
+-      PCS_Mask    : constant := 2#1111# * PCS;
+-      DLYBCS      : constant := 2 ** 16;
+-      DLYBCS_Mask : constant := 16#ff# * DLYBCS;
+-   end SPI_MR;
+-
+-   --  Constants for the SPI TDR register
+-
+-   package SPI_TDR is
+-      TD       : constant := 2 ** 0;
+-      PCS      : constant := 2 ** 16;
+-      LASTXFER : constant := 2 ** 24;
+-   end SPI_TDR;
+-
+-   --  Constants for the SPI SR register; also used by the SPI IER, IDR and
+-   --  IMR registers.
+-
+-   package SPI_SR is
+-      RDRF    : constant := 2 ** 0;
+-      TDRE    : constant := 2 ** 1;
+-      MODF    : constant := 2 ** 2;
+-      OVRES   : constant := 2 ** 3;
+-      ENDRX   : constant := 2 ** 4;
+-      ENDTX   : constant := 2 ** 5;
+-      RXBUFF  : constant := 2 ** 6;
+-      TXBUFE  : constant := 2 ** 7;
+-      NSSR    : constant := 2 ** 8;
+-      TXEMPTY : constant := 2 ** 9;
+-      UNDES   : constant := 2 ** 10;
+-      SPIENS  : constant := 2 ** 16;
+-   end SPI_SR;
+-
+-   --  Constants for the SPI CSR register
+-
+-   package SPI_CSR is
+-      CPOL   : constant := 2 ** 0;
+-      NCPHA  : constant := 2 ** 1;
+-      CSNAAT : constant := 2 ** 2;
+-      CSAAT  : constant := 2 ** 3;
+-      BITS   : constant := 2 ** 4;
+-      SCBR   : constant := 2 ** 8;
+-      DLYBS  : constant := 2 ** 16;
+-      DLYBCT : constant := 2 ** 24;
+-   end SPI_CSR;
+-
+-   SPI : SPI_Registers with Volatile, Import,
+-                            Address => System'To_Address (SPI_Base);
+-
+-   SPI_ID : constant := 21;
+-
+-   --------------------
+-   -- Watchdog Timer --
+-   --------------------
+-
+-   type WDT_Registers is record
+-      WDT_CR : Word;
+-      WDT_MR : Word;
+-      WDT_SR : Word;
+-   end record;
+-
+-   --  Constants for the WDT CR register
+-
+-   package WDT_CR is
+-      KEY    : constant := 16#a5_00_00_00#;
+-      WDRSTT : constant := 2 ** 0;
+-   end WDT_CR;
+-
+-   --  Constants for the WDT MR register
+-
+-   package WDT_MR is
+-      WDV       : constant := 2 ** 0;
+-      WDFIEN    : constant := 2 ** 2;
+-      WDRSTEN   : constant := 2 ** 13;
+-      WDDPROC   : constant := 2 ** 14;
+-      WDDIS     : constant := 2 ** 15;
+-      WDD       : constant := 2 ** 16;
+-      WDDBGHLT  : constant := 2 ** 13;
+-      WDIDLEHLT : constant := 2 ** 13;
+-   end WDT_MR;
+-
+-   WDT : WDT_Registers with Volatile, Import,
+-                             Address => System'To_Address (WDT_Base);
+-
+-   -------------------------------------------------
+-   -- Universal Asynchronous Receiver Transmitter --
+-   -------------------------------------------------
+-
+-   type UART_Registers is record
+-      UART_CR   : Word;
+-      UART_MR   : Word;
+-      UART_IER  : Word;
+-      UART_IDR  : Word;
+-
+-      UART_IMR  : Word;
+-      UART_SR   : Word;
+-      UART_RHR  : Word;
+-      UART_THR  : Word;
+-
+-      UART_BRGR : Word;
+-   end record;
+-
+-   --  Constants for the UART CR register
+-
+-   package UART_CR is
+-      RSTRX  : constant := 2 ** 2;
+-      RSTTX  : constant := 2 ** 3;
+-      RXEN   : constant := 2 ** 4;
+-      RXDIS  : constant := 2 ** 5;
+-      TXEN   : constant := 2 ** 6;
+-      TXDIS  : constant := 2 ** 7;
+-      RSTSTA : constant := 2 ** 8;
+-   end UART_CR;
+-
+-   --  Constants for the UART MR register
+-
+-   package UART_MR is
+-      CHMODE_NORMAL          : constant := 0 * 2 ** 14;
+-      CHMODE_AUTOMATIC       : constant := 1 * 2 ** 14;
+-      CHMODE_LOCAL_LOOPBACK  : constant := 2 * 2 ** 14;
+-      CHMODE_REMOTE_LOOPBACK : constant := 3 * 2 ** 14;
+-
+-      PAR_EVEN  : constant := 0 * 2 ** 9;
+-      PAR_ODD   : constant := 1 * 2 ** 9;
+-      PAR_SPACE : constant := 2 * 2 ** 9;
+-      PAR_MARK  : constant := 3 * 2 ** 9;
+-      PAR_NO    : constant := 4 * 2 ** 9;
+-   end UART_MR;
+-
+-   --  Constants for the UART SR register
+-
+-   package UART_SR is
+-      RXRDY   : constant := 2 ** 0;
+-      TXRDY   : constant := 2 ** 1;
+-      ENDRX   : constant := 2 ** 3;
+-      ENDTX   : constant := 2 ** 4;
+-      OVRE    : constant := 2 ** 5;
+-      FRAME   : constant := 2 ** 6;
+-      PARE    : constant := 2 ** 7;
+-      TXEMPTY : constant := 2 ** 9;
+-      TXBUFE  : constant := 2 ** 11;
+-      RXBUFF  : constant := 2 ** 12;
+-   end UART_SR;
+-
+-   UART0 : UART_Registers with Volatile, Import,
+-                               Address => System'To_Address (UART0_Base);
+-   UART1 : UART_Registers with Volatile, Import,
+-                               Address => System'To_Address (UART1_Base);
+-
+-   UART0_ID : constant := 8;
+-   UART1_ID : constant := 9;
+-end System.SAM4S;
+diff -rupN gnat-gpl-2015-src-orig/src/ada/s-textio-sam4s.adb gnat-gpl-2015-src-patched/src/ada/s-textio-sam4s.adb
+--- gnat-gpl-2015-src-orig/src/ada/s-textio-sam4s.adb	2015-05-06 05:53:30.000000000 -0500
++++ gnat-gpl-2015-src-patched/src/ada/s-textio-sam4s.adb	2015-07-15 09:07:36.974999629 -0500
+@@ -6,7 +6,7 @@
+ --                                                                          --
+ --                                 B o d y                                  --
+ --                                                                          --
+---          Copyright (C) 1992-2014, Free Software Foundation, Inc.         --
++--          Copyright (C) 1992-2013, 2015, Free Software Foundation, Inc.   --
+ --                                                                          --
+ -- GNAT is free software;  you can  redistribute it  and/or modify it under --
+ -- terms of the  GNU General Public License as published  by the Free Soft- --
+@@ -29,53 +29,28 @@
+ --                                                                          --
+ ------------------------------------------------------------------------------
+ 
+---  Minimal version of Text_IO body for use on SAM4S, using UART1
++--  Minimal version of Text_IO body for use on SAM4S, using UART0.
+ 
+-with System.SAM4S; use System.SAM4S;
++with Interfaces; use Interfaces;
++with SAM4S.UART;
++with SAM4S;
+ 
+ package body System.Text_IO is
+ 
+-   Baudrate : constant := 115_200;
+-   --  Bitrate to use
+-
+    ---------
+    -- Get --
+    ---------
+ 
+-   function Get return Character is
+-      (Character'Val (UART1.UART_RHR and 16#FF#));
++   function Get return Character is (SAM4S.UART.Char_Get (SAM4S.UART.UART0));
+ 
+    ----------------
+    -- Initialize --
+    ----------------
+ 
+    procedure Initialize is
+-      PB2 : constant := 2 ** 2; --  RX line
+-      PB3 : constant := 2 ** 3; --  TX line
+-
+-      Uart_Ports : constant := PB2 + PB3;
+-
+    begin
++      --  Initialization handled by setup_pll.adb.
+       Initialized := True;
+-
+-      --  Init uart1
+-
+-      --  Power-up clocks
+-
+-      PMC.PMC_PCER0 := 2 ** UART1_ID + 2 ** PIOB_ID;
+-
+-      --  Setup IO pins
+-
+-      PIOB.PDR := Uart_Ports;
+-      PIOB.ODR := Uart_Ports;
+-      PIOB.PUER := PB3;
+-      PIOB.MDDR := Uart_Ports;
+-      PIOB.ABCDSR1 := PIOB.ABCDSR1 and not Uart_Ports;
+-      PIOB.ABCDSR2 := PIOB.ABCDSR2 and not Uart_Ports;
+-
+-      UART1.UART_BRGR := 120_000_000 / (16 * Baudrate);
+-      UART1.UART_MR := UART_MR.CHMODE_NORMAL or UART_MR.PAR_NO;
+-      UART1.UART_CR := UART_CR.TXEN or UART_CR.RXEN;
+    end Initialize;
+ 
+    -----------------
+@@ -83,14 +58,18 @@ package body System.Text_IO is
+    -----------------
+ 
+    function Is_Tx_Ready return Boolean is
+-      ((UART1.UART_SR and UART_SR.TXRDY) /= 0);
++   begin
++      return SAM4S.UART.Is_Tx_Ready (SAM4S.UART.UART0);
++   end Is_Tx_Ready;
+ 
+    -----------------
+    -- Is_Rx_Ready --
+    -----------------
+ 
+    function Is_Rx_Ready return Boolean is
+-      ((UART1.UART_SR and UART_SR.RXRDY) /= 0);
++   begin
++      return SAM4S.UART.Is_Rx_Ready (SAM4S.UART.UART0);
++   end Is_Rx_Ready;
+ 
+    ---------
+    -- Put --
+@@ -98,7 +77,7 @@ package body System.Text_IO is
+ 
+    procedure Put (C : Character) is
+    begin
+-      UART1.UART_THR := Character'Pos (C);
++      SAM4S.UART.Char_Put (SAM4S.UART.UART0, C);
+    end Put;
+ 
+    ----------------------------
