@@ -271,12 +271,9 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbbosu-armv7m.adb gnat-gpl-2015-src-
         else To_Priority (IP (Interrupt - First_IRQ)));
 diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-patched/src/ada/s-bbcppr-armv7m.adb
 --- gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb	2015-05-06 05:53:27.000000000 -0500
-+++ gnat-gpl-2015-src-patched/src/ada/s-bbcppr-armv7m.adb	2015-07-15 09:29:17.009717955 -0500
-@@ -6,9 +6,10 @@
++++ gnat-gpl-2015-src-patched/src/ada/s-bbcppr-armv7m.adb	2015-07-29 13:28:20.246675998 -0500
+@@ -8,7 +8,7 @@
  --                                                                          --
- --                                  B o d y                                 --
- --                                                                          --
-+--          Copyright (C) 2015, Free Software Foundation, Inc.              --
  --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
  --             Copyright (C) 2003-2005 The European Space Agency            --
 ---                     Copyright (C) 2003-2015, AdaCore                     --
@@ -284,20 +281,7 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-
  --                                                                          --
  -- GNARL is free software; you can  redistribute it  and/or modify it under --
  -- terms of the  GNU General Public License as published  by the Free Soft- --
-@@ -17,9 +18,9 @@
- -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
- -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
- --                                                                          --
----                                                                          --
----                                                                          --
----                                                                          --
-+-- As a special exception under Section 7 of GPL version 3, you are granted --
-+-- additional permissions described in the GCC Runtime Library Exception,   --
-+-- version 3.1, as published by the Free Software Foundation.               --
- --                                                                          --
- -- You should have received a copy of the GNU General Public License and    --
- -- a copy of the GCC Runtime Library Exception along with this program;     --
-@@ -33,6 +34,7 @@
+@@ -33,6 +33,7 @@
  
  with Ada.Unchecked_Conversion; use Ada;
  
@@ -305,7 +289,7 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-
  with System.Storage_Elements;
  with System.Multiprocessors;
  with System.BB.Board_Support;
-@@ -40,6 +42,7 @@ with System.BB.Threads;
+@@ -40,6 +41,7 @@ with System.BB.Threads;
  with System.BB.Threads.Queues;
  with System.BB.Time;
  with System.Machine_Code; use System.Machine_Code;
@@ -313,7 +297,7 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-
  
  package body System.BB.CPU_Primitives is
     use Parameters;
-@@ -100,6 +103,15 @@ package body System.BB.CPU_Primitives is
+@@ -100,6 +102,15 @@ package body System.BB.CPU_Primitives is
     pragma Volatile (Alarm_Time);
     pragma Import (C, Alarm_Time, "__gnat_alarm_time");
  
@@ -329,7 +313,7 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-
     procedure SV_Call_Handler;
     pragma Export (Asm, SV_Call_Handler, "__gnat_sv_call_trap");
  
-@@ -275,6 +287,7 @@ package body System.BB.CPU_Primitives is
+@@ -275,6 +286,7 @@ package body System.BB.CPU_Primitives is
  
     procedure GNAT_Error_Handler (Trap : Vector_Id) is
     begin
@@ -337,7 +321,7 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-
        case Trap is
           when Reset_Vector =>
              raise Program_Error with "unexpected reset";
-@@ -384,6 +397,49 @@ package body System.BB.CPU_Primitives is
+@@ -384,6 +396,49 @@ package body System.BB.CPU_Primitives is
           Volatile => True);
     end Pend_SV_Handler;
  
@@ -387,7 +371,7 @@ diff -rupN gnat-gpl-2015-src-orig/src/ada/s-bbcppr-armv7m.adb gnat-gpl-2015-src-
     ---------------------
     -- SV_Call_Handler --
     ---------------------
-@@ -478,9 +534,11 @@ package body System.BB.CPU_Primitives is
+@@ -478,9 +533,11 @@ package body System.BB.CPU_Primitives is
     begin
        Install_Trap_Handler (EH, Reset_Vector);
        Install_Trap_Handler (EH, NMI_Vector);
